@@ -43,7 +43,26 @@ class Database
             return false;
         }
     }
-    public function update() {}
+    public function update($table, $params= array(), $where = null) {
+        if($this->tableExist($table)){
+            $args = array();
+            foreach($params as $key => $value){
+                $args[] = "$key = '$value'";
+            }
+            $sql = "UPDATE $table SET ". implode(', ', $args);
+            if($where != null){
+                $sql .= "WHERE $where";
+            }
+            if($this->mysqli->query($sql)){
+                array_push($this->result, $this->mysqli->affected_rows);
+                return true;
+            }else{
+                array_push($this->result, $this->mysqli->error);
+            }
+        }else{
+            return false;
+        }
+    }
     public function delete() {}
     public function select() {}
 
