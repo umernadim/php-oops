@@ -7,7 +7,19 @@ $obj = new Database();
 //echo "Insert result is: ";
 //print_r($obj->getResult());
 
-$obj->update('student', ['student_name' => 'Ali', 'age'=>23, 'city'=>'karachi'], 'id="3"');
+//$obj->update('student', ['student_name' => 'Ali', 'age'=>23, 'city'=>'karachi'], 'id="3"');
 
-echo "Update result is: ";
+//echo "Update result is: ";
+//print_r($obj->getResult());
+
+//$obj->delete('student', 'id="3"');
+//echo "Delete result is: ";
+//print_r($obj->getResult());
+
+//$obj->sql("SELECT * FROM student");
+//echo "Sql result is: ";
+//print_r($obj->getResult());
+
+$obj->select('student','*', null, null, null, null);
+echo "selected result is: ";
 print_r($obj->getResult());
