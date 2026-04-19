@@ -96,9 +96,9 @@ class Database
                 $sql .= "ORDER BY $order";
             }
             if ($limit != null) {
-                if(isset($_GET['page'])){
+                if (isset($_GET['page'])) {
                     $page = $_GET['page'];
-                }else{
+                } else {
                     $page = 1;
                 }
                 $start = ($page - 1) * $limit;
@@ -118,6 +118,48 @@ class Database
         }
     }
 
+    public function pagination($table, $join = null, $where = null, $limit = null)
+    {
+        if ($this->tableExist($table)) {
+            if ($join != null) {
+                $sql = "SELECT COUNT(*) FROM $table";
+
+                if ($join != null) {
+                    $sql .= " JOIN $join";
+                }
+                if ($where != null) {
+                    $sql .= " WHERE $where";
+                }
+
+                $query = $this->mysqli->query($sql);
+                $total_records = $query->fetch_array()[0];
+                $total_page = ceil($total_records / $limit);
+                $url = basename($_SERVER['PHP_SELF']);
+
+                $page = isset($_GET['page']) ? $_GET['page'] : 1;
+
+                $output = "<ul class='pagination'>";
+                if ($page > 1) {
+                    $output .= "<li><a href='$url?page=" . ($page - 1) . "'>Prev</a></li>";
+                }
+                if ($total_records > $limit) {
+                    for ($i = 1; $i <= $total_page; $i++) {
+                        $cls = ($i == $page) ? "class='active'" : "";
+                        $output .= "<li $cls><a href='$url?page=$i'>$i</a></li>";
+                    }
+                }
+                if ($total_page < $page) {
+                    $output .= "<li><a href='$url?page=" . ($page + 1) . "'>Next</a></li>";
+                    $output .= "</ul>";
+                    echo $output;
+                }
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
     public function sql($sql)
     {
         $query = $this->mysqli->query($sql);

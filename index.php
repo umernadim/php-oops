@@ -21,5 +21,9 @@ $obj = new Database();
 //print_r($obj->getResult());
 
 $obj->select('student','*', null, null, null, null);
-echo "selected result is: ";
+echo "\n\nSelected result is: ";
 print_r($obj->getResult());
+
+
+echo $obj->pagination('student', null, null, 2);
+
